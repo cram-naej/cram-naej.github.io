@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -35,36 +34,62 @@
 <div class="box anniversaire" id="anais"></div>
 
 <script>
-    function afficherDifference(dateCible, nom, elementId, type) {
-        const maintenant = new Date();
-        let deltaMs = dateCible - maintenant;
-        let sens = "Il reste";
-        let emoji = "🎂";
+    function calculerDifferencePrecise(dateCible, maintenant) {
+        let annees = maintenant.getFullYear() - dateCible.getFullYear();
+        let mois = maintenant.getMonth() - dateCible.getMonth();
+        let jours = maintenant.getDate() - dateCible.getDate();
 
-        if (type === "evenement") {
-            emoji = "💖";
+        // Ajustement si le jour du mois n'est pas encore atteint
+        if (jours < 0) {
+            mois--;
+            // Obtenir le nombre de jours du mois précédent
+            const dernierJourMoisPrecedent = new Date(
+                maintenant.getFullYear(),
+                maintenant.getMonth(),
+                0
+            ).getDate();
+            jours += dernierJourMoisPrecedent;
         }
 
-        if (deltaMs < 0) {
-            deltaMs = maintenant - dateCible;
-            sens = "Il y a";
+        // Ajustement si le mois n'est pas encore atteint
+        if (mois < 0) {
+            annees--;
+            mois += 12;
         }
 
-        const secondesTotales = Math.floor(deltaMs / 1000);
-        const jours = Math.floor(secondesTotales / 86400);
+        // Calcul des heures, minutes et secondes
+        const deltaMs = maintenant - dateCible;
+        const secondesTotales = Math.abs(Math.floor(deltaMs / 1000));
         const heures = Math.floor((secondesTotales % 86400) / 3600);
         const minutes = Math.floor((secondesTotales % 3600) / 60);
         const secondes = secondesTotales % 60;
 
-        // Calcul des mois et années approximatifs
-        const moisEnviron = jours > 0 ? Math.floor(jours / 30) : 0;
-        const anneesEnviron = moisEnviron > 0 ? (moisEnviron / 12).toFixed(2) : 0;
+        return {
+            annees: annees,
+            mois: mois,
+            jours: jours,
+            heures: heures,
+            minutes: minutes,
+            secondes: secondes,
+            deltaMs: deltaMs
+        };
+    }
+
+    function afficherDifference(dateCible, nom, elementId, type) {
+        const maintenant = new Date();
+        const difference = calculerDifferencePrecise(dateCible, maintenant);
+
+        let sens = difference.deltaMs < 0 ? "Il y a" : "Il reste";
+        const emoji = type === "evenement" ? "💖" : "🎂";
 
         document.getElementById(elementId).innerHTML = `
             <strong>${emoji} ${nom}</strong><br>
-            ${sens} ${jours} jours, ${heures} heures,
-            ${minutes} minutes et ${secondes} secondes<br>
-            (≈ ${moisEnviron} mois, ≈ ${anneesEnviron} ans)
+            ${sens} ${Math.abs(difference.annees)} années,
+            ${Math.abs(difference.mois)} mois,
+            ${Math.abs(difference.jours)} jours,
+            ${Math.abs(difference.heures)} heures,
+            ${Math.abs(difference.minutes)} minutes et
+            ${Math.abs(difference.secondes)} secondes
         `;
     }
 
