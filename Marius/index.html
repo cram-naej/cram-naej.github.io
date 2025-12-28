@@ -1,80 +1,90 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-     <meta charset="UTF-8">
-     <title>Calcul de durée</title>
-     <style>
-         body {
-             font-family: Arial, sans-serif;
-             background: #f5f5f5;
-             padding: 20px;
-         }
-         .box {
-             background: white;
-             padding: 15px;
-             margin-bottom: 15px;
-             border-radius: 8px;
-             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-         }
-     </style>
+    <meta charset="UTF-8">
+    <title>Calcul de durée</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .box {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .anniversaire {
+            color: #e74c3c;
+        }
+        .evenement {
+            color: #3498db;
+        }
+    </style>
 </head>
 <body>
 
 <h1>Différence de dates</h1>
 
-<div class="box" id="marius"></div>
-<div class="box" id="ana"></div>
-<div class="box" id="jean-marc"></div>
-<div class="box" id="anais"></div>
-
+<div class="box anniversaire" id="marius"></div>
+<div class="box evenement" id="rencontre"></div>
+<div class="box anniversaire" id="jean-marc"></div>
+<div class="box anniversaire" id="anais"></div>
 
 <script>
-     function afficherDifference(dateCible, nom, elementId) {
-         const maintenant = new Date();
-         let deltaMs = dateCible - maintenant;
-         let sens = "Il reste";
+    function afficherDifference(dateCible, nom, elementId, type) {
+        const maintenant = new Date();
+        let deltaMs = dateCible - maintenant;
+        let sens = "Il reste";
+        let emoji = "🎂";
 
-         if (deltaMs < 0) {
-             deltaMs = maintenant - dateCible;
-             sens = "Il y a";
-         }
+        if (type === "evenement") {
+            emoji = "💖";
+        }
 
-         const secondesTotales = Math.floor(deltaMs / 1000);
+        if (deltaMs < 0) {
+            deltaMs = maintenant - dateCible;
+            sens = "Il y a";
+        }
 
-         const jours = Math.floor(secondesTotales / 86400);
-         const heures = Math.floor((secondesTotales % 86400) / 3600);
-         const minutes = Math.floor((secondesTotales % 3600) / 60);
-         const secondes = secondesTotales % 60;
+        const secondesTotales = Math.floor(deltaMs / 1000);
+        const jours = Math.floor(secondesTotales / 86400);
+        const heures = Math.floor((secondesTotales % 86400) / 3600);
+        const minutes = Math.floor((secondesTotales % 3600) / 60);
+        const secondes = secondesTotales % 60;
 
-         const moisEnviron = Math.floor(jours / 30);
-         const anneesEnviron = (moisEnviron / 12).toFixed(2);
+        // Calcul des mois et années approximatifs
+        const moisEnviron = jours > 0 ? Math.floor(jours / 30) : 0;
+        const anneesEnviron = moisEnviron > 0 ? (moisEnviron / 12).toFixed(2) : 0;
 
-         document.getElementById(elementId).innerHTML = `
-             <strong>${nom}</strong><br>
-             ${sens} ${jours} jours, ${heures} heures,
-             ${minutes} minutes et ${secondes} secondes<br>
-             (≈ ${moisEnviron} mois, ≈ ${anneesEnviron} ans)
-         `;
-     }
+        document.getElementById(elementId).innerHTML = `
+            <strong>${emoji} ${nom}</strong><br>
+            ${sens} ${jours} jours, ${heures} heures,
+            ${minutes} minutes et ${secondes} secondes<br>
+            (≈ ${moisEnviron} mois, ≈ ${anneesEnviron} ans)
+        `;
+    }
 
-     const dateMarius = new Date("2025-07-20T19:21:00");
-     const dateAna = new Date("2018-10-29T21:56:00");
-const dateAnniversaireJeanMarc = new Date("1991-07-20T12:50:00");
-const dateAnniversaireAnais = new Date("1983-06-06T7:45:00");
+    const dateAnniversaireMarius = new Date("2025-07-20T19:21:00");
+    const dateAnniversaireDeRencontre = new Date("2018-10-29T21:56:00");
+    const dateAnniversaireJeanMarc = new Date("1991-07-20T12:50:00");
+    const dateAnniversaireAnais = new Date("1983-06-06T07:45:00");
 
-     function mettreAJour() {
-         afficherDifference(dateMarius, "Anniversaire Marius", "marius");
-         afficherDifference(dateAna, "Ana", "ana");
-afficherDifference(dateAnniversaireJeanMarc, "Anniversaire Jean-Marc", "jean-marc");
-afficherDifference(dateAnniversaireAnais, "Anniversaire Anaïs", "anais");
+    function mettreAJour() {
+        afficherDifference(dateAnniversaireMarius, "Anniversaire Marius", "marius", "anniversaire");
+        afficherDifference(dateAnniversaireDeRencontre, "Anniversaire de rencontre", "rencontre", "evenement");
+        afficherDifference(dateAnniversaireJeanMarc, "Anniversaire Jean-Marc", "jean-marc", "anniversaire");
+        afficherDifference(dateAnniversaireAnais, "Anniversaire Anaïs", "anais", "anniversaire");
+    }
 
-     }
+    // Mise à jour immédiate
+    mettreAJour();
 
-     // Mise à jour immédiate
-     mettreAJour();
-
-     // Mise à jour chaque seconde
-     setInterval(mettreAJour, 1000);
+    // Mise à jour chaque seconde
+    setInterval(mettreAJour, 1000);
 </script>
 
 </body>
