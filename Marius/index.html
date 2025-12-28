@@ -25,6 +25,8 @@
 <div class="box" id="marius"></div>
 <div class="box" id="ana"></div>
 <div class="box" id="jean-marc"></div>
+<div class="box" id="anais"></div>
+
 
 <script>
      function afficherDifference(dateCible, nom, elementId) {
@@ -58,11 +60,14 @@
      const dateMarius = new Date("2025-07-20T19:21:00");
      const dateAna = new Date("2018-10-29T21:56:00");
 const dateAnniversaireJeanMarc = new Date("1991-07-20T12:50:00");
+const dateAnniversaireAnais = new Date("1983-06-06T7:45:00");
 
      function mettreAJour() {
          afficherDifference(dateMarius, "Anniversaire Marius", "marius");
          afficherDifference(dateAna, "Ana", "ana");
 afficherDifference(dateAnniversaireJeanMarc, "Anniversaire Jean-Marc", "jean-marc");
+afficherDifference(dateAnniversaireJeanMarc, "Anniversaire Anaïs", "anais");
+
      }
 
      // Mise à jour immédiate
