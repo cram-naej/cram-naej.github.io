@@ -79,7 +79,7 @@
         const maintenant = new Date();
         const difference = calculerDifferencePrecise(dateCible, maintenant);
 
-        let sens = difference.deltaMs < 0 ? "Il y a" : "Il reste";
+        let sens = difference.deltaMs > 0 ? "Il y a" : "Il reste";
         const emoji = type === "evenement" ? "💖" : "🎂";
 
         document.getElementById(elementId).innerHTML = `
