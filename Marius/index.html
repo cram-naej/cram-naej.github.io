@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+     <meta charset="UTF-8">
+     <title>Calcul de durée</title>
+     <style>
+         body {
+             font-family: Arial, sans-serif;
+             background: #f5f5f5;
+             padding: 20px;
+         }
+         .box {
+             background: white;
+             padding: 15px;
+             margin-bottom: 15px;
+             border-radius: 8px;
+             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+         }
+     </style>
+</head>
+<body>
+
+<h1>Différence de dates</h1>
+
+<div class="box" id="marius"></div>
+<div class="box" id="ana"></div>
+
+<script>
+     function afficherDifference(dateCible, nom, elementId) {
+         const maintenant = new Date();
+         let deltaMs = dateCible - maintenant;
+         let sens = "Il reste";
+
+         if (deltaMs < 0) {
+             deltaMs = maintenant - dateCible;
+             sens = "Il y a";
+         }
+
+         const secondesTotales = Math.floor(deltaMs / 1000);
+
+         const jours = Math.floor(secondesTotales / 86400);
+         const heures = Math.floor((secondesTotales % 86400) / 3600);
+         const minutes = Math.floor((secondesTotales % 3600) / 60);
+         const secondes = secondesTotales % 60;
+
+         const moisEnviron = Math.floor(jours / 30);
+         const anneesEnviron = (moisEnviron / 12).toFixed(2);
+
+         document.getElementById(elementId).innerHTML = `
+             <strong>${nom}</strong><br>
+             ${sens} ${jours} jours, ${heures} heures,
+             ${minutes} minutes et ${secondes} secondes<br>
+             (≈ ${moisEnviron} mois, ≈ ${anneesEnviron} ans)
+         `;
+     }
+
+     const dateMarius = new Date("2025-07-20T19:21:00");
+     const dateAna = new Date("2018-10-29T21:56:00");
+
+     function mettreAJour() {
+         afficherDifference(dateMarius, "Marius", "marius");
+         afficherDifference(dateAna, "Ana", "ana");
+     }
+
+     // Mise à jour immédiate
+     mettreAJour();
+
+     // Mise à jour chaque seconde
+     setInterval(mettreAJour, 1000);
+</script>
+
+</body>
+</html>
